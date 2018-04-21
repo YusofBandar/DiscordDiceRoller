@@ -5,9 +5,14 @@ module.exports = {
     example: '!rolllife set20 => member life to 20',
     execute(client, message, args) {
 
+        var gameObj = {
+            Name: "",
+            Members: []
+        }
+
         var command = message.content.split(" ")
         //set author life
-        if (command[1].startsWith("set")) {
+        if (command[1].startsWith("newGame")) {
             var life = lifeExtractor(command[1]);
             console.log(life[0]);
     
