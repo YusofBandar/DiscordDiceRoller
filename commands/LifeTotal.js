@@ -30,15 +30,17 @@ module.exports = {
             var member = new memberObj(message.author.username,20,true);
             game.members.push(member);
             currentGames.push(game);
-
+            console.log(currentGames.length);
             message.reply(command[2] + " game added");
         }
         //add to author life 
         else if (command[1].startsWith("addmember")) {
+            console.log("hit");
             var mentions = Array.from(message.mentions.users);
             var index = -1;
 
-            console.log(currentGames);
+            
+           console.log(currentGames.length);
 
             mentions.forEach(user => {
                 //console.log(user[1].username);
