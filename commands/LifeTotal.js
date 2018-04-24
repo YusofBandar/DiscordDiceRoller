@@ -4,6 +4,8 @@ module.exports = {
     description: 'Maintains Life',
     example: '!rolllife set20 => member life to 20',
     execute(client, message, args) {
+        const NodeCache = require( "node-cache" );
+        const myCache = new NodeCache();
 
         var gameObj = function(gameName){
             this.name = gameName;
@@ -29,18 +31,20 @@ module.exports = {
             var game = new gameObj(gameName);
             var member = new memberObj(message.author.username,20,true);
             game.members.push(member);
-            currentGames.push(game);
-            console.log(currentGames.length);
-            message.reply(command[2] + " game added");
+            //currentGames.push(game);
+
+            
+           
+        
+           
         }
         //add to author life 
-        else if (command[1].startsWith("addmember")) {
-            console.log("hit");
+        else if (command[1].startsWith("addMember")) {
+            console.log("ADD MEMBER");
             var mentions = Array.from(message.mentions.users);
             var index = -1;
 
-            
-           console.log(currentGames.length);
+           
 
             mentions.forEach(user => {
                 //console.log(user[1].username);
