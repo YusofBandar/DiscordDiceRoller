@@ -1,1 +1,29 @@
-{"Games":[{"name":"magic","members":[{"memberName":"MightyGarlic","memberLife":20,"admin":true}]},{"name":"TESTING","members":[{"memberName":"MightyGarlic","memberLife":20,"admin":true}]}]}
+{
+  "ActiveGame": "TES",
+  "Games": [{
+    "name": "magic",
+    "members": [{
+      "memberName": "MightyGarlic",
+      "memberLife": 20,
+      "admin": true
+    }]
+  }, {
+    "name": "TESTING",
+    "members": [{
+      "memberName": "MightyGarlic",
+      "memberLife": 20,
+      "admin": true
+    }]
+  }, {
+    "name": "TES",
+    "members": [{
+      "memberName": "MightyGarlic",
+      "memberLife": 20,
+      "admin": true
+    }, {
+      "memberName": "Dice-Roller",
+      "memberLife": 20,
+      "admin": false
+    }]
+  }]
+}

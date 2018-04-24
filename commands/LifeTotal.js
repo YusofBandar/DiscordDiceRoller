@@ -8,12 +8,12 @@ module.exports = {
         var fs = require('fs');
 
 
-        var gameObj = function(gameName){
+        var gameObj = function (gameName) {
             this.name = gameName;
             this.members = [];
         }
 
-        var memberObj = function(memberName,memberLife,admin){
+        var memberObj = function (memberName, memberLife, admin) {
             this.memberName = memberName;
             this.memberLife = memberLife;
             this.admin = admin;
@@ -23,57 +23,89 @@ module.exports = {
         //start new game
         if (command[1].startsWith("newGame")) {
             var gameName;
-            if(command[2] === undefined){
+            if (command[2] === undefined) {
                 gameName = "Game"
-            }else{
+            } else {
                 gameName = command[2];
             }
             var game = new gameObj(gameName);
-            var member = new memberObj(message.author.username,20,true);
+            var member = new memberObj(message.author.username, 20, true);
             game.members.push(member);
-        
-            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data){
-                if (err){
+
+            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data) {
+                if (err) {
                     console.log(err);
                     message.reply(gameName + " could not be created");
                     message.reply("Data could not be found")
                 } else {
-               
+
                     var ActiveGames = JSON.parse(data);
                     ActiveGames.Games.push(game);
+                    ActiveGames.ActiveGame = gameName;
+                    jsonGames = JSON.stringify(ActiveGames);
+                    fs.writeFile('ActiveGame.json', jsonGames, 'utf8', function writeFileCallback(err, data) {});
 
-                    jsonGames = JSON.stringify(ActiveGames); 
-                    fs.writeFile('ActiveGame.json', jsonGames, 'utf8', function writeFileCallback(err, data){
+                    message.reply(gameName + " has been created")
+                }
+            });
 
-                    });
-            }});
 
-           
 
-            
-           
-        
-           
+
+
+
+
         }
         //add to author life 
         else if (command[1].startsWith("addMember")) {
             console.log("ADD MEMBER");
             var mentions = Array.from(message.mentions.users);
-            var index = -1;
 
-           
+            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data) {
+                if (err) {
+                    console.log(err);
+                    message.reply(gameName + " could not be created");
+                    message.reply("Data could not be found")
+                } else {
 
-            mentions.forEach(user => {
-                //console.log(user[1].username);
+                    var ActiveGames = JSON.parse(data);
+
+                    for (var i = 0; i < ActiveGames.Games.length; i++) {
+                        var name = ActiveGames.Games[i].name;
+                        if (name == ActiveGames.ActiveGame) {
+                            mentions.forEach(user => {
+                                //console.log(user[1].username);
+                                ActiveGames.Games[i].members.push(new memberObj(user[1].username, 20, false));
+                            });
+
+                            break;
+                        }
+
+                        if (name == command[2]) {
+                            mentions.forEach(user => {
+                                //console.log(user[1].username);
+                                ActiveGames.Games[i].members.push(new memberObj(user[1].username, 20, false));
+                            });
+
+                            break;
+                        }
+                    }
+
+                    jsonGames = JSON.stringify(ActiveGames);
+                    fs.writeFile('ActiveGame.json', jsonGames, 'utf8', function writeFileCallback(err, data) {});
+
+                }
             });
+
+
         }
         //minus from authors life 
         else if (command[1].startsWith("minus")) {
 
         }
 
-        
-        
+
+
 
         function lifeExtractor(message) {
             var regex = /\d{1,3}/g;
