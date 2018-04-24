@@ -4,8 +4,9 @@ module.exports = {
     description: 'Maintains Life',
     example: '!rolllife set20 => member life to 20',
     execute(client, message, args) {
-        const NodeCache = require( "node-cache" );
-        const myCache = new NodeCache();
+
+        var fs = require('fs');
+
 
         var gameObj = function(gameName){
             this.name = gameName;
@@ -18,7 +19,6 @@ module.exports = {
             this.admin = admin;
         }
 
-        var currentGames = [];
         var command = message.content.split(" ")
         //start new game
         if (command[1].startsWith("newGame")) {
@@ -31,7 +31,24 @@ module.exports = {
             var game = new gameObj(gameName);
             var member = new memberObj(message.author.username,20,true);
             game.members.push(member);
-            //currentGames.push(game);
+        
+            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data){
+                if (err){
+                    console.log(err);
+                    message.reply(gameName + " could not be created");
+                    message.reply("Data could not be found")
+                } else {
+               
+                    var ActiveGames = JSON.parse(data);
+                    ActiveGames.Games.push(game);
+
+                    jsonGames = JSON.stringify(ActiveGames); 
+                    fs.writeFile('ActiveGame.json', jsonGames, 'utf8', function writeFileCallback(err, data){
+
+                    });
+            }});
+
+           
 
             
            
@@ -55,6 +72,7 @@ module.exports = {
 
         }
 
+        
         
 
         function lifeExtractor(message) {
