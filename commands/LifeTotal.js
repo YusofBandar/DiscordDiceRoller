@@ -73,20 +73,13 @@ module.exports = {
                     for (var i = 0; i < ActiveGames.Games.length; i++) {
                         var name = ActiveGames.Games[i].name;
                         if (name == ActiveGames.ActiveGame) {
-                            mentions.forEach(user => {
-                                //console.log(user[1].username);
-                                ActiveGames.Games[i].members.push(new memberObj(user[1].username, 20, false));
-                            });
-
+                            //console.log(user[1].username);
+                            addMembers(ActiveGames.Games[i], mentions);
                             break;
                         }
 
                         if (name == command[2]) {
-                            mentions.forEach(user => {
-                                //console.log(user[1].username);
-                                ActiveGames.Games[i].members.push(new memberObj(user[1].username, 20, false));
-                            });
-
+                            addMembers(ActiveGames.Games[i],mentions);
                             break;
                         }
                     }
@@ -104,7 +97,12 @@ module.exports = {
 
         }
 
-
+        function addMembers(game, mentions) {
+            mentions.forEach(user => {
+                //console.log(user[1].username);
+                game.members.push(new memberObj(user[1].username, 20, false));
+            });
+        }
 
 
         function lifeExtractor(message) {
