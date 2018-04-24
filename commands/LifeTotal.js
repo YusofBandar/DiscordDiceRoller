@@ -1,8 +1,8 @@
 module.exports = {
     name: 'Life Keeper',
-    command: '!rolllife',
+    command: '!rollgame',
     description: 'Maintains Life',
-    example: '!rolllife set20 => member life to 20',
+    example: '!rollgame set20 => member life to 20',
     execute(client, message, args) {
 
         var fs = require('fs');

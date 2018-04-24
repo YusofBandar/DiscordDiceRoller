@@ -6,6 +6,10 @@
       "memberName": "MightyGarlic",
       "memberLife": 20,
       "admin": true
+    }, {
+      "memberName": "Dice-Roller",
+      "memberLife": 20,
+      "admin": false
     }]
   }, {
     "name": "TESTING",
