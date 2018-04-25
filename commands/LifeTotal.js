@@ -32,29 +32,7 @@ module.exports = {
             var member = new memberObj(message.author.username, 20, true);
             game.members.push(member);
 
-            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data) {
-                if (err) {
-                    console.log(err);
-                    message.reply(gameName + " could not be created");
-                    message.reply("Data could not be found")
-                } else {
-
-                    var ActiveGames = JSON.parse(data);
-                    ActiveGames.Games.push(game);
-                    ActiveGames.ActiveGame = gameName;
-                    jsonGames = JSON.stringify(ActiveGames);
-                    fs.writeFile('ActiveGame.json', jsonGames, 'utf8', function writeFileCallback(err, data) {});
-
-                    message.reply(gameName + " has been created")
-                }
-            });
-
-
-
-
-
-
-
+            fs.readFile('ActiveGame.json', 'utf8',newGame);
         }
         //add to author life 
         else if (command[1].startsWith("addMember")) {
@@ -79,13 +57,14 @@ module.exports = {
                         }
 
                         if (name == command[2]) {
-                            addMembers(ActiveGames.Games[i],mentions);
+                            addMembers(ActiveGames.Games[i], mentions);
                             break;
                         }
                     }
 
-                    jsonGames = JSON.stringify(ActiveGames);
-                    fs.writeFile('ActiveGame.json', jsonGames, 'utf8', function writeFileCallback(err, data) {});
+                    writeToJSON(ActiveGames);
+
+                    
 
                 }
             });
@@ -94,6 +73,57 @@ module.exports = {
         }
         //minus from authors life 
         else if (command[1].startsWith("minus")) {
+
+        } else if (command[1].startsWith("active")) {
+            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data) {
+                if (err) {
+                    console.log(err);
+                    message.reply(gameName + " could not be created");
+                    message.reply("Data could not be found")
+                } else {
+
+                    var ActiveGames = JSON.parse(data);
+                    var found = false;
+                    for (var i = 0; i < ActiveGames.Games.length; i++) {
+                        if (command[2] === ActiveGames.Games[i].name) {
+                            ActiveGames.ActiveGame = command[2];
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    writeToJSON(ActiveGames);
+
+                    if (found) {
+                        message.reply(command[2] + " is now the active game");
+                    } else {
+                        message.reply("game could not be found");
+                    }
+
+                }
+            });
+        }
+
+        function newGame(err,data){
+            if (err) {
+                console.log(err);
+                message.reply(gameName + " could not be created");
+                message.reply("Data could not be found")
+            } else {
+
+                var ActiveGames = JSON.parse(data);
+                ActiveGames.Games.push(game);
+                ActiveGames.ActiveGame = gameName;
+                
+                writeToJSON(ActiveGames)
+
+                message.reply(gameName + " has been created")
+            }
+        }
+
+        function writeToJSON(JsonFile) {
+            json = JSON.stringify(JsonFile);
+            fs.writeFile('ActiveGame.json', json, 'utf8', function writeFileCallback(err, data) {});
 
         }
 
