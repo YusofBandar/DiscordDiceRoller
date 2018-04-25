@@ -21,7 +21,7 @@ module.exports = {
 
         var command = message.content.split(" ")
         //start new game
-        if (command[1].startsWith("newGame")) {
+        if (command[1].startsWith("new")) {
             var gameName;
             if (command[2] === undefined) {
                 gameName = "Game"
@@ -43,11 +43,39 @@ module.exports = {
 
 
         }
+        else if(command[1].startsWith("add")){
+
+        }
         //minus from authors life 
         else if (command[1].startsWith("minus")) {
 
-        } else if (command[1].startsWith("active")) {
+        } else if(command[1].startsWith("view")){
+            fs.readFile('ActiveGame.json', 'utf8',viewGame);
+
+        }else if (command[1].startsWith("active")) {
             fs.readFile('ActiveGame.json', 'utf8',changeActiveGame);
+        }
+
+        function viewGame(err,data){
+            if(err){
+                console.log(err);
+                message.reply("Data could not be found");
+            }else {
+                var ActiveGame = JSON.parse(data);
+
+                for (var i = 0; i < ActiveGame.Games.length; i++) {
+                    if (command[2] === ActiveGame.Games[i].name) {
+                        message.channel.send("========" + ActiveGame.Games[i].name + "========");
+
+                        for(var j=0;j<ActiveGame.Games[i].members.length;j++){
+                            message.channel.send(" " + ActiveGame.Games[i].members[j].memberName + ": " + ActiveGame.Games[i].members[j].memberLife);
+                        }
+
+                        message.channel.send("==========================")
+                    }
+                }
+
+            }
         }
 
         function changeActiveGame(err,data){
