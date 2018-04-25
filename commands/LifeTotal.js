@@ -32,42 +32,14 @@ module.exports = {
             var member = new memberObj(message.author.username, 20, true);
             game.members.push(member);
 
-            fs.readFile('ActiveGame.json', 'utf8',newGame);
+            fs.readFile('ActiveGame.json', 'utf8', newGame);
         }
         //add to author life 
         else if (command[1].startsWith("addMember")) {
             console.log("ADD MEMBER");
             var mentions = Array.from(message.mentions.users);
 
-            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data) {
-                if (err) {
-                    console.log(err);
-                    message.reply(gameName + " could not be created");
-                    message.reply("Data could not be found")
-                } else {
-
-                    var ActiveGames = JSON.parse(data);
-
-                    for (var i = 0; i < ActiveGames.Games.length; i++) {
-                        var name = ActiveGames.Games[i].name;
-                        if (name == ActiveGames.ActiveGame) {
-                            //console.log(user[1].username);
-                            addMembers(ActiveGames.Games[i], mentions);
-                            break;
-                        }
-
-                        if (name == command[2]) {
-                            addMembers(ActiveGames.Games[i], mentions);
-                            break;
-                        }
-                    }
-
-                    writeToJSON(ActiveGames);
-
-                    
-
-                }
-            });
+            fs.readFile('ActiveGame.json', 'utf8',addMember);
 
 
         }
@@ -75,36 +47,10 @@ module.exports = {
         else if (command[1].startsWith("minus")) {
 
         } else if (command[1].startsWith("active")) {
-            fs.readFile('ActiveGame.json', 'utf8', function readFileCallback(err, data) {
-                if (err) {
-                    console.log(err);
-                    message.reply(gameName + " could not be created");
-                    message.reply("Data could not be found")
-                } else {
-
-                    var ActiveGames = JSON.parse(data);
-                    var found = false;
-                    for (var i = 0; i < ActiveGames.Games.length; i++) {
-                        if (command[2] === ActiveGames.Games[i].name) {
-                            ActiveGames.ActiveGame = command[2];
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    writeToJSON(ActiveGames);
-
-                    if (found) {
-                        message.reply(command[2] + " is now the active game");
-                    } else {
-                        message.reply("game could not be found");
-                    }
-
-                }
-            });
+            fs.readFile('ActiveGame.json', 'utf8',changeActiveGame);
         }
 
-        function newGame(err,data){
+        function changeActiveGame(err,data){
             if (err) {
                 console.log(err);
                 message.reply(gameName + " could not be created");
@@ -112,9 +58,68 @@ module.exports = {
             } else {
 
                 var ActiveGames = JSON.parse(data);
+                var found = false;
+                for (var i = 0; i < ActiveGames.Games.length; i++) {
+                    if (command[2] === ActiveGames.Games[i].name) {
+                        ActiveGames.ActiveGame = command[2];
+                        found = true;
+                        break;
+                    }
+                }
+
+                writeToJSON(ActiveGames);
+
+                if (found) {
+                    message.reply(command[2] + " is now the active game");
+                } else {
+                    message.reply("game could not be found");
+                }
+
+            }
+        }
+
+        function addMember(err, data) {
+            if (err) {
+                console.log(err);
+                message.reply(gameName + " could not be created");
+                message.reply("Data could not be found")
+            } else {
+                var ActiveGames = JSON.parse(data);
+
+                if(command[2] == null){
+                    command[2] = ActiveGames.ActiveGame;
+                }
+
+                for (var i = 0; i < ActiveGames.Games.length; i++) {
+                    var name = ActiveGames.Games[i].name;
+                    if (name == command[2]) {
+                        addMembers(ActiveGames.Games[i], mentions);
+                        break;
+                    }
+                }
+
+                writeToJSON(ActiveGames);
+
+                message.reply("members were added to " + command[2]);
+            }
+        }
+
+        function addMembers(game, mentions) {
+            mentions.forEach(user => {
+                //console.log(user[1].username);
+                game.members.push(new memberObj(user[1].username, 20, false));
+            });
+        }
+
+        function newGame(err, data) {
+            if (err) {
+                console.log(err);
+                message.reply(gameName + " could not be created");
+                message.reply("Data could not be found")
+            } else {
+                var ActiveGames = JSON.parse(data);
                 ActiveGames.Games.push(game);
                 ActiveGames.ActiveGame = gameName;
-                
                 writeToJSON(ActiveGames)
 
                 message.reply(gameName + " has been created")
@@ -127,14 +132,6 @@ module.exports = {
 
         }
 
-        function addMembers(game, mentions) {
-            mentions.forEach(user => {
-                //console.log(user[1].username);
-                game.members.push(new memberObj(user[1].username, 20, false));
-            });
-        }
-
-
         function lifeExtractor(message) {
             var regex = /\d{1,3}/g;
             var life = [];
@@ -144,9 +141,7 @@ module.exports = {
                 life = [];
                 life.push(20);
             }
-
             return life;
-
         }
     }
 }

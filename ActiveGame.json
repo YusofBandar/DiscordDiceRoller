@@ -1,5 +1,5 @@
 {
-  "ActiveGame": "MA",
+  "ActiveGame": "MagicD20",
   "Games": [{
     "name": "magic",
     "members": [{
@@ -42,6 +42,13 @@
     }]
   }, {
     "name": "MA",
+    "members": [{
+      "memberName": "MightyGarlic",
+      "memberLife": 20,
+      "admin": true
+    }]
+  }, {
+    "name": "MagicD20",
     "members": [{
       "memberName": "MightyGarlic",
       "memberLife": 20,
