@@ -1,58 +1,15 @@
 {
-  "ActiveGame": "MagicD20",
-  "Games": [{
-    "name": "magic",
-    "members": [{
-      "memberName": "MightyGarlic",
-      "memberLife": 20,
-      "admin": true
-    }, {
-      "memberName": "Dice-Roller",
-      "memberLife": 20,
-      "admin": false
+    "ActiveGame": "MAGIC",
+    "Games": [{
+        "name": "MAGIC",
+        "members": [{
+            "memberName": "MightyGarlic",
+            "memberLife": 20,
+            "admin": true
+        }, {
+            "memberName": "Dice-Roller",
+            "memberLife": 20,
+            "admin": false
+        }]
     }]
-  }, {
-    "name": "TESTING",
-    "members": [{
-      "memberName": "MightyGarlic",
-      "memberLife": 20,
-      "admin": true
-    }]
-  }, {
-    "name": "TES",
-    "members": [{
-      "memberName": "MightyGarlic",
-      "memberLife": 20,
-      "admin": true
-    }, {
-      "memberName": "Dice-Roller",
-      "memberLife": 20,
-      "admin": false
-    }]
-  }, {
-    "name": "MAGIC",
-    "members": [{
-      "memberName": "MightyGarlic",
-      "memberLife": 20,
-      "admin": true
-    }, {
-      "memberName": "Dice-Roller",
-      "memberLife": 20,
-      "admin": false
-    }]
-  }, {
-    "name": "MA",
-    "members": [{
-      "memberName": "MightyGarlic",
-      "memberLife": 20,
-      "admin": true
-    }]
-  }, {
-    "name": "MagicD20",
-    "members": [{
-      "memberName": "MightyGarlic",
-      "memberLife": 20,
-      "admin": true
-    }]
-  }]
 }

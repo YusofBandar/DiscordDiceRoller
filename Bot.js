@@ -30,7 +30,31 @@ for (const file of commandFiles) {
     })
 }
 
+var ActiveGames;
 
+fs.readFile('ActiveGame.json', 'utf8', (err,data)=>{
+    ActiveGames=JSON.parse(data);
+});
+
+process.stdin.resume();//so the program will not close instantly
+
+function exitHandler(options, err) {
+    jsonGame = JSON.stringify(ActiveGames); //convert it back to json
+    fs.writeFile('ActiveGame.json', jsonGame, 'utf8', function(){});
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+// catches "kill pid" (for example: nodemon restart)
+process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
+process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
 
 // The ready event is vital, it means that your bot will only start reacting to information
 // from Discord _after_ ready is emitted
@@ -48,7 +72,7 @@ client.on('message', message => {
 
         commands.forEach(element => {
             if(message.content.startsWith(element.command.command)){
-                element.command.execute(client, message,args);
+                element.command.execute(client, message,args,ActiveGames);
             }
         });
 
